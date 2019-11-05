@@ -28,5 +28,7 @@
   <ItemGroup>
     <None Include="..\resources\shader_fragment.glsl" />
     <None Include="..\resources\shader_vertex.glsl" />
+    <None Include="..\resources\sky_fragment.glsl" />
+    <None Include="..\resources\sky_vertex.glsl" />
   </ItemGroup>
 </Project>
