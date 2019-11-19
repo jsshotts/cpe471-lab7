@@ -14,7 +14,7 @@ void main()
 {
 
 //diffuse
-vec3 lp = vec3(1000, -800, 500);
+vec3 lp = vec3(1000, -400, 500);
 vec3 n = normalize(vertex_normal);
 vec3 ld = normalize(lp - vertex_pos);
 float diffuse = clamp(dot(n, ld), 0, 1);

@@ -299,7 +299,6 @@ public:
 		skyprog->addUniform("P");
 		skyprog->addUniform("V");
 		skyprog->addUniform("M");
-		skyprog->addUniform("campos");
 		skyprog->addAttribute("vertPos");
 		skyprog->addAttribute("vertNor");
 		skyprog->addAttribute("vertTex");
@@ -323,12 +322,9 @@ public:
 
 		// Clear framebuffer.
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		// Create the matrix stacks - please leave these alone for now
 		
 		glm::mat4 V, M, P; //View, Model and Perspective matrix
 		V = mycam.process(frametime);
-		M = glm::mat4(1);
 		// Apply orthographic projection....
 		P = glm::perspective((float)(3.14159 / 4.), (float)((float)width/ (float)height), 0.1f, 1000.0f); //so much type casting... GLM metods are quite funny ones
 
@@ -337,11 +333,10 @@ public:
 		glUniformMatrix4fv(skyprog->getUniform("P"), 1, GL_FALSE, &P[0][0]);
 		glUniformMatrix4fv(skyprog->getUniform("V"), 1, GL_FALSE, &V[0][0]);
 
-		glm::mat4 S = glm::scale(glm::mat4(1.0f), glm::vec3(0.3f, 0.3f, 0.3f));
+		mat4 S = glm::scale(mat4(1.0f), vec3(0.3f, 0.3f, 0.3f));
 		mat4 T = translate(mat4(1), -mycam.pos);
 		M = T * S;
 		glUniformMatrix4fv(skyprog->getUniform("M"), 1, GL_FALSE, &M[0][0]);
-		glUniform3f(skyprog->getUniform("campos"), -mycam.pos.x, -mycam.pos.y, -mycam.pos.z);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, Texture5);
 		glDisable(GL_DEPTH_TEST);
@@ -349,27 +344,27 @@ public:
 		glEnable(GL_DEPTH_TEST);
 		skyprog->unbind();
 		
-		//animation with the model matrix:
-		static float w = 0.0;
-		w += 0.6 * frametime;//rotation angle
-		glm::mat4 RotateY = glm::rotate(glm::mat4(1.0f), w, glm::vec3(0.0f, 1.0f, 0.0f));
-		float angle = 3.1415926/2.0;
-		glm::mat4 RotateX = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(1.0f, 0.0f, 0.0f));
-		glm::mat4 TransZ = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-		S = glm::scale(glm::mat4(1.0f), glm::vec3(0.8f, 0.8f, 0.8f));
+		////animation with the model matrix:
+		//static float w = 0.0;
+		//w += 0.6 * frametime;//rotation angle
+		//glm::mat4 RotateY = glm::rotate(glm::mat4(1.0f), w, glm::vec3(0.0f, 1.0f, 0.0f));
+		//float angle = 3.1415926/2.0;
+		//glm::mat4 RotateX = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(1.0f, 0.0f, 0.0f));
+		//glm::mat4 TransZ = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		//S = glm::scale(glm::mat4(1.0f), glm::vec3(0.8f, 0.8f, 0.8f));
 
-		M =  TransZ * RotateY * RotateX * S;
+		//M =  TransZ * RotateY * RotateX * S;
 	
-		prog->bind();		
-		//send the matrices to the shaders
-		glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, &P[0][0]);
-		glUniformMatrix4fv(prog->getUniform("V"), 1, GL_FALSE, &V[0][0]);
-		glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, &M[0][0]);
-		glUniform3f(prog->getUniform("campos"), -mycam.pos.x, -mycam.pos.y, -mycam.pos.z);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, Texture);
-		shape->draw(prog,FALSE);
-		prog->unbind();
+		//prog->bind();		
+		////send the matrices to the shaders
+		//glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, &P[0][0]);
+		//glUniformMatrix4fv(prog->getUniform("V"), 1, GL_FALSE, &V[0][0]);
+		//glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, &M[0][0]);
+		//glUniform3f(prog->getUniform("campos"), -mycam.pos.x, -mycam.pos.y, -mycam.pos.z);
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, Texture);
+		//shape->draw(prog,FALSE);
+		//prog->unbind();
 	}
 };
 //******************************************************************************************
@@ -377,9 +372,7 @@ int main(int argc, char **argv)
 {
 	std::string resourceDir = "../resources"; // Where the resources are loaded from
 	if (argc >= 2)
-	{
 		resourceDir = argv[1];
-	}
 
 	Application *application = new Application();
 
@@ -407,7 +400,6 @@ int main(int argc, char **argv)
 		// Poll for and process events.
 		glfwPollEvents();
 	}
-
 	// Quit program.
 	windowManager->shutdown();
 	return 0;
